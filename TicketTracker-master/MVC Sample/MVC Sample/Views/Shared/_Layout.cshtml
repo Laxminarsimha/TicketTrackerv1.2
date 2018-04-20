@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Defect Tracker</title>
+
+    <link href="~/Content/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/assets/css/material-dashboard.css" rel="stylesheet" />
+    <link href="~/Content/assets/css/demo.css" rel="stylesheet" />
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple" data-image="/Content/assets/img/sidebar-1.jpg">
+            <div class="logo">
+                <a href="" class="simple-text">
+                    Tracker
+                </a>
+            </div>
+            <div class="sidebar-wrapper">
+                <ul class="nav">
+                    <li class="active">
+                        <a href="@Url.Action("index","Home")">
+                            <i class="material-icons">dashboard</i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("search","Home")">
+                            <i class="material-icons">search</i>
+                            <p>Search</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./table.html">
+                            <i class="material-icons">content_paste</i>
+                            <p>Defects List</p>
+                        </a>
+                    </li>
+                </ul>
+ 
+            </div>
+        </div>
+        <div class="main-panel">
+            <nav class="navbar navbar-transparent navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#"> Tracker Dashboard </a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="material-icons">dashboard</i>
+                                    <p class="hidden-lg hidden-md">Dashboard</p>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="material-icons">notifications</i>
+                                    <span class="notification">5</span>
+                                    <p class="hidden-lg hidden-md">Notifications</p>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="#">Prince Koshy responded to your email</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">You have 5 new tasks</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Let's Train the portal</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">5 PME Tickets newly added</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">One datafix approved </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="material-icons">person</i>
+                                    <p class="hidden-lg hidden-md">Profile</p>
+                                </a>
+                            </li>
+                        </ul>
+                        <form class="navbar-form navbar-right" role="search">
+                            <div class="form-group  is-empty">
+                                <input type="text" class="form-control" placeholder="Search for datafixes">
+                                <span class="material-input"></span>
+                            </div>
+                            <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                                <i class="material-icons">search</i>
+                                <div class="ripple-container"></div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                @RenderBody()
+            </div>
+            <div id="livprop_chatbox" style="position:relative;float:right;opacity:0.85;z-index: -1;" >
+                <a class="live-button" id="live-button"></a>
+                <div id="livprop_popup1" class="livprop_overlay" style="display: block; visibility: visible; animation: shake 8s infinite;">
+                    <div id="livprop_popup" class="livprop_popup" style="width: 300px;">
+                        <div class="livprop_modal-header" id="livprop_modal-header" style="background-color: rgb(0, 65, 123);">
+                            <img src="https://cwc.livserv.in/uploads/Templates/CurvedHeadTemplate/chat.png" id="chaticon" class="livprop_chaticon">
+                            <span class="livprop_close" id="livchat_close" data-toggle="tooltip" data-placement="bottom">
+                                <font color="FFFFFF"></font>
+                            </span><span class="livprop_modal-title" id="livprop_header-title"
+                                         style="font-size: 17px; color: rgb(255, 255, 255);">Affordable - Live Support</span>
+                        </div>
+                        <div class="chat_window" id="chat_window" style="display: block;">
+                            <div id="ls_chatFrameDiv" style="height: 200px;">
+                                <iframe src="https://sub1.livserv.in/livserv/livservtemp3/livserv_ns_new.jsp?p0=1109718041713551401&amp;p1=B1
+                                        -C1097-D2-R2&amp;p2=0&amp;p3=Ratnam&amp;p4=NA&amp;p5=Affordable - Data Fixes Support&amp;p6=United States&amp;p7=64.143.113.7&amp;p8=NA&amp;p9=newchat&amp;p10=na&amp;p11=1109718041713551401&amp;p12=www.google.co.in$ReferralUrl&amp;p13=Carrollton&amp;p14=United States&amp;p15=2018/4/17 13:55:14&amp;p16=https%3A//realpage.com/&amp;p17=0&amp;p18=   &amp;p19=200&amp;p20=%23004372&amp;p21=white&amp;p22=0&amp;p23=1&amp;p24=null&amp;p25=12196&amp;p26=0&amp;p28=&amp;ls_LivWinWin_width=300&amp;ls_agentID=NA#ls_chatsess=1109718041713551401_2018%252F4%252F17+13%253A55%253A14_1_64.143.113.7_US_2_2534_Windows+10+_United+States_Ratnam_Carrollton&amp;ls_brodet=0__null__Nill__mozilla%252F5.0+%2528windows+nt+10.0%253B+win64%253B+x64%2529+applewebkit%252F537.36+%2528khtml%252C+like+gecko%2529+chrome%252F65.0.3325.181+safari%252F537.36__www.google.co.in__Chrome+__Windows+10+__https%253A%252F%252Fmuppaprojects.com%252F__+++__0__https%253A%252F%252Fmuppaprojects.com&amp;ls_tempcs_id=NA&amp;ls_visitorId=NA&amp;ls_serverip=NA&amp;date=1523953515398" style="width:100%;height:100%;" frameborder="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Content/assets/js/material.min.js"></script>
+    <script src="~/Content/assets/js/perfect-scrollbar.jquery.min.js"></script>
+    <script src="~/Content/assets/js/material-dashboard.js"></script>
+    <script src="~/Content/assets/js/highcharts.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
