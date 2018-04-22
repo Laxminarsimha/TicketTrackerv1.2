@@ -2804,6 +2804,7 @@
     <Content Include="Content\assets\js\demo.js" />
     <Content Include="Content\assets\js\highcharts.js" />
     <Content Include="Content\assets\js\jquery-3.2.1.min.js" />
+    <Content Include="Content\assets\js\LoginController.js" />
     <Content Include="Content\assets\js\material-dashboard.js" />
     <Content Include="Content\assets\js\material.min.js" />
     <Content Include="Content\assets\js\perfect-scrollbar.jquery.min.js" />
