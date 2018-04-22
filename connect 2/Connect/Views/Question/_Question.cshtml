@@ -1,0 +1,38 @@
+﻿@using Connect.Models.Core
+
+@{
+    Question question = Model;
+}
+
+<div class="questionArea q_@question.Id" questionId="@question.Id">
+    <div class="avatarArea">
+        @if (question.createdBy.image != null)
+        {
+            <img src='@Url.Action("Image","Account")/?id=@question.createdBy.Id' class="avatar size32" />
+        }
+        else
+        {
+            <i class="avatar avatar-color-@(question.createdBy.UserName.Length%215) avatar-letter-@question.createdBy.UserName[0]"></i>
+        }
+
+    </div>
+    <div class="questionTextArea">
+        <div class="question-time">
+            <span> @question.createdBy.UserName </span> <span class="pull-right badge bg-info"> @question.dateCreated.ToString("hh:mm:ss tt")</span>
+
+            <span title="Like this question" class="like" qid="@question.Id" style="float:right;margin-right: 10px;"><i class="fa fa-thumbs-o-up fa-1x"></i> Like @(question.Likes != null ? @question.Likes.Count(): 0)</span>
+
+            @if (question.Important)
+            {
+                <span class="" style="float:right;margin-right: 10px;"><i title="Good Question" class="fa fa-flag-o fa-1x"></i></span>
+            }
+            @if (question.Rating > 0)
+            {
+                <span class="rateit" data-rateit-value="@question.Rating" data-rateit-ispreset="false" data-rateit-readonly="true"></span>
+            }
+        </div>
+        <div>
+            @question.question
+        </div>
+    </div>
+</div>

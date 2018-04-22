@@ -1,0 +1,65 @@
+﻿@using Connect.Models
+@using System.Configuration
+@model LoginModel
+@{
+    ViewBag.Title = "Sign In To Connect . . ";
+}
+
+@section head{
+    <style>
+        body {
+            background: url('@Url.Content("~/Content/images/bg.jpg")') no-repeat;
+            background-size:cover;
+        }
+    </style>
+}
+<div class="row" style="margin-top: 5%;">
+    <div class="col-md-4 col-md-offset-4 login-form-cap">
+        <div style="text-align:center;padding-top:10px">
+            <img src="@(ConfigurationManager.AppSettings["PRESIDENT_LOGO"])" class="avatar--circular" style="width:64px" />
+        </div>
+
+        <div class="col-md-offset-4">
+            <h3>
+                Let's C<i class='fa fa-comment-o'></i>nnect . . .
+            </h3>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4 login-form">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-6">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "@domain.com is NOT Required." })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-4 control-label" })
+                    <div class="col-md-6">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-4 col-md-8">
+                        <input type="submit" value="Sign in" class="btn btn-info" />
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+    <div class="col-md-4">
+        <section id="socialLoginForm"></section>
+    </div>
+</div>
+
+@section Scripts {
+
+}

@@ -1,0 +1,41 @@
+﻿@using Connect.Models.Core
+@{
+    Question question = ViewBag.question;
+}
+<input type="hidden" id="answerId" value="@question.Id" />
+<table style="width:100%;height: 65px;">
+    <tbody>
+        <tr>
+            <td style="width:45px;vertical-align: top;">
+                @if (question.createdBy.image != null)
+                {
+                    <img src="@Url.Action("Image","Account")/?id=@question.createdBy.Id" alt="" id="respondFormImage" class="avatar size64" style="margin-top:2px" />
+                }
+                else
+                {
+                    <i class="avatar avatar-color-@(question.createdBy.UserName.Length%215) avatar-letter-@question.createdBy.UserName[0]"></i>
+                }               
+            </td>
+            <td style="padding-left:10px;vertical-align: top;">
+                <label id="respondFormUser">@question.createdBy.UserName</label>
+                <label id="respondFormQuestion">@question.question</label>
+            </td>
+            <td style="vertical-align: top;">
+                <label id="respondFormDate" class="pull-right badge bg-info">@question.dateCreated.ToString("hh:mm tt")</label>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<textarea class="form-control" rows="5" id="answer" placeholder="Your answer . .">@question.answer</textarea>
+<div style="padding-top:5px" id="statusDiv">
+</div>
+<div class="respondFormButtons">
+
+    <div style="padding-top:5px">
+        <input type="checkbox" name="" id="respondStatus" @(question.Important == true ? "checked=\"checked\"" : "") />
+        <label for="respondStatus" class="questionTypeLabel form-control">Good Question</label>
+        <div id="rateit" class="rateit" data-rateit-step="1" data-rateit-value="@question.Rating"></div>
+        <button type="button" class="btn btn-sm btn-dark-grey" id="cancelBtn">Cancel</button>
+        <button type="button" class="btn btn-sm btn-primary" id="answerBtn">Reply</button>
+    </div>
+</div>

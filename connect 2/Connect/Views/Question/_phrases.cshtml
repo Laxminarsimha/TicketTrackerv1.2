@@ -1,0 +1,17 @@
+﻿@using Connect.Util
+@using Connect.Models.Core
+
+@{
+    List<Phrase> phrases = ViewBag.phrases;
+}
+
+@*@Html.DropDownList("phrase", new SelectList(ViewBag.phrases, "Text", "Text"), new { id = "phrase", @class = "form-control" })*@
+
+<ul id="phrasesList">
+    @foreach (var phrase in phrases)
+    {
+        string str = phrase.Text;
+        var firstChars = str.Where((ch, index) => ch != ' ' && (index == 0 || str[index - 1] == ' ')).ToArray();
+        <li class="phrase" title="@phrase.Text">@(new string(firstChars))</li>
+    }
+</ul>

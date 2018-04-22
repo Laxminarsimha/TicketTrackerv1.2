@@ -1,0 +1,488 @@
+﻿@using Connect.Models.Core
+@{
+    ViewBag.Title = "Respond";
+}
+
+@section head{
+    <style>
+        #questions {
+            overflow-y: auto;
+            max-height: 100%;
+        }
+
+        .questionArea {
+            cursor: pointer;
+        }
+
+            .questionArea:hover {
+                background-color: antiquewhite;
+            }
+
+        #respondBlock label {
+            display: block;
+            text-transform: capitalize;
+        }
+
+        .questionTypeLabel {
+            display: inline !important;
+        }
+
+        #rating {
+            display: inline-block;
+            padding-top: 5px;
+            vertical-align: middle;
+        }
+
+        #respondForm {
+            min-height: 300px;
+            border: 1px dashed #d1d1d1;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .respondFormButtons {
+            float: right;
+        }
+
+            .respondFormButtons button {
+                margin-left: 10px;
+            }
+
+            .respondFormButtons div:first-child {
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .respondFormButtons div:last-child {
+                display: inline-block;
+            }
+
+
+        #respondFormQuestion {
+            color: green;
+        }
+
+        .hasAns {
+            cursor: default !important;
+        }
+
+        .panel-body-full {
+            height: calc(100vh - 270px);
+            overflow-y: auto;
+        }
+
+        #summaryTable {
+            width: 50px;
+            height: 50px;
+        }
+
+            #summaryTable td {
+                padding: 2px;
+                font-weight: bold;
+                vertical-align: top;
+                font-size: 16px;
+                text-align: center;
+                border: 1px dotted #eee;
+            }
+
+        #qCircle {
+            width: 150px;
+            height: 150px;
+        }
+
+        .digital {
+            font-family: 'digital-7';
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .phrase {
+            text-transform: uppercase;
+            letter-spacing:3px;
+        }
+
+        #phrasesList li {
+            list-style: none;
+            padding: 5px;
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #d1d1d1;
+        }
+
+            #phrasesList li:hover {
+                background-color: greenyellow;
+                font-weight: bold;
+            }
+    </style>
+}
+
+<div class="row panel-bk-color-qa" style="margin-bottom:10px; margin-right: -10px; margin-left:-10px">
+    <div class="col-md-12">
+        <div class="panel-title">
+            <div class="col-md-12">
+                <span class="recipient question-txt-col">
+                    <i class="fa fa-bullhorn"></i>
+                    <input type="text" class="form-control" placeholder="Type here to broadcast a message to all . . ."
+                           data-position="bottom" data-step="31" data-intro="Messages posted here will be broadcasted to all online users . . "
+                           style="display:inline;width:80%;margin-top:8px;" id="broadcastMsg" />
+                    <button id="broadcast" style="margin-top:2px;background-color:#5f5f5f" class="btn btn">Broadcast</button>
+                    <span id="broadcastStatus" style="font-size:12px"></span>
+                    <span style="float: right;margin-top: 10px;" title="Online User Count"><i class="fa fa-users"></i> Users : <span id="user-count">  <span id="users"></span></span></span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" style="margin-right:5px">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading subject-block">
+                <i class="fa fa-question-circle fa-1x "></i> Questions to president
+                <span id="unansweredCount" class="digital" style="float:right"></span>
+            </div>
+            <div class="panel-body panel-body-full">
+                <div id="questions">
+                    <table class="table" id="questionTable" data-position="top" data-step="32" data-intro="All questions posted by the users will be shown here. Clicking on the question will be shown in the editor area . .">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading subject-block">
+                <i class="fa fa-mail-reply fa-1x "></i> Response Area
+                <span style="float:right"><a href="@Url.Action("index","Admin")" target="_blank">Dashboard</a></span>
+            </div>
+            <div class="panel-body  panel-body-full">
+                <div id="respondBlock" data-position="top" data-step="33" data-intro="This is editor area, Selected question will be opened here for reply . .">
+                    <div id="respondForm">
+                    </div>
+                    <div style="padding-top:10px">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td style="width:20px;padding-right:3px;vertical-align:top"><input type="button" id="addPhrase" value="Add" title="Add new phrase to list" class="btn-sm btn-group-sm btn btn-primary" /></td>
+                                    <td id="phrasesTd" style="vertical-align:top;text-align:left"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding-top:10px">
+                        Increase Session Time By
+                        @Html.DropDownList("minutes", Enumerable.Range(5, 30).Where(i => i % 5 == 0).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }), new { id = "minutes" })
+                        Minutes <button id="increaseSession" class="btn-sm btn-group-sm btn btn-primary">Update</button> <span id="sessionUpdateStatus"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>@*Respond panel*@
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading subject-block">
+                <i class="fa fa-check-square-o fa-1x "></i> Answered By President
+                <span id="answeredCount" class="digital" style="float:right"></span>
+            </div>
+            <div class="panel-body panel-body-full">
+                <div id="answers">
+                    <table class="table" id="answerTable" data-position="top" data-step="34" data-intro="Answered questions will be send to all and moved to here from the questions area . . .">
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="codeDiv">
+
+</div>
+
+@section scripts {
+    <script src="~/Content/time/jquery.plugin.min.js"></script>
+    <script src="~/Content/time/jquery.countdown.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            loadPhrases();
+            questions()
+            answers();
+            initSignalR()
+            resetEditor();
+            loadSessionTime();
+            ansQcount();
+            unAnsQCount();
+        })
+
+        $('#increaseSession').click(function () {
+            $.ajax({
+                url: "@Url.Action("ExtendSession", "Time")",
+                method: 'post',
+                data: { minutes: $('#minutes').val() },
+                beforeSend: function () {
+                    $("sessionUpdateStatus").addClass("loading");
+                    $("#sessionUpdateStatus").html("Please wait . . .");
+                },
+                success: function (result) {
+                    $("#sessionUpdateStatus").html("<i class='fa fa-check-circle'></i> Updated");
+                    setTimeout(function () { $("#sessionUpdateStatus").html(""); }, 3000);
+                },
+                error: function () {
+                    $("#sessionUpdateStatus").html("Error occured, sorry for that . .");
+                },
+                completed: function () {
+                    $("sessionUpdateStatus").removeClass("loading");
+                }
+            });
+        })
+
+        //get editor for selected question
+        $(document.body).on('click', '.questionArea', function () {
+            var id = $(this).attr('questionId');
+            $.ajax({
+                url: "@Url.Action("respondEditor", "Question")",
+                method: 'post',
+                data: { id: id },
+                beforeSend: function () {
+                    $("#respondForm").html("");
+                    $("#respondForm").addClass("loading");
+                },
+                success: function (result) {
+                    $("#respondForm").html(result);
+                    ApplyRateit();
+                },
+                error: function () {
+                    $("#respondForm").html("Unable to load editor, Sorry for that . . ");
+                },
+                complete: function () {
+                    $("#respondForm").removeClass("loading");
+                }
+            });
+        })
+
+        $(document.body).on('click', '#cancelBtn', function () {
+            resetEditor();
+        });
+
+        $(document.body).on('click', '#answerBtn', function () {
+            reply();
+        });
+
+        $('#broadcastMsg').keypress(function (e) {
+            if (e.which == 13)
+                broadcast();
+        });
+
+        $('#broadcast').click(function () {
+            broadcast();
+        })
+
+        $('#addPhrase').click(function () {
+            addPhrase();
+        })
+
+        function broadcast() {
+            var msg = $('#broadcastMsg').val();
+            if (msg != '') {
+                $.ajax({
+                    url: "@Url.Action("Broadcast","Question")",
+                    method: 'post',
+                    data: { msg: msg },
+                    beforeSend: function () {
+                        $("broadcastStatus").addClass("loading");
+                    },
+                    success: function (result) {
+                        $("#broadcastStatus").html(result);
+                        console.log(result);
+                        $('#broadcastMsg').val("");
+                        setTimeout(function () { $("#broadcastStatus").html(""); }, 3000);
+                    },
+                    complete: function () {
+                        $("#broadcastStatus").removeClass("loading");
+                    }
+                });
+            }
+        }
+
+        function resetEditor() {
+            $("#respondForm").html("Please select a question to reply . .");
+        }
+
+        function questions() {
+            $.ajax({
+                url: "@Url.Action("Questions","Question")",
+                method: 'post',
+                data: { previous: $('#recentQuestionIndex').val() },
+                beforeSend: function () {
+                    $("questions").addClass("loading");
+                },
+                success: function (result) {
+                    $("#questionTable tbody").html(result);
+                },
+                complete: function () {
+                    $("#questions").removeClass("loading");
+                }
+            });
+        }
+
+        function answers() {
+            $.ajax({
+                url: "@Url.Action("Answers","Question")",
+                method: 'post',
+                success: function (result) {
+                    $("#answerTable tbody").html(result);
+                }
+            });
+        }
+
+        var qid;
+        var answeredQuestion;
+
+        function reply() {
+            var answer = $('#answer').val();
+            qid = $('#answerId').val();
+            answeredQuestion = $('.q_' + qid);
+            var respondStatus = $('#respondStatus').prop("checked");
+            var rating = $('#rateit').rateit('value');
+            if (answer == '')
+                return;
+            $('#statusDiv').html("Working, Please Wait . .");
+            $.ajax({
+                url: "@Url.Action("Reply","Question")",
+                method: 'post',
+                data: { id: qid, answer: answer, important: respondStatus, rating: rating },
+                beforeSend: function () {
+                    $("#respondForm").html("Sending your reply . .");
+                    $('.a_' + qid).hide();
+                },
+                success: function (result) {
+                    $("#respondForm").html("Reply sent sucessfully, Please select another question to respond . .");
+                    answeredQuestion.hide();
+                },
+                error: function () {
+                    $("#respondForm").html("Some error while sending reply, Sorry for that . .");
+                }
+            });
+        }
+
+        function initSignalR() {
+            $(function () {
+                var chat = $.connection.questionHub;
+                chat.client.questions = function (msg) {
+                    $("#questionTable tbody").append(msg);
+                    ApplyRateit();
+                };
+                chat.client.answers = function (msg) {
+                    $("#answerTable tbody").prepend(msg);
+                    ApplyRateit();
+                };
+                chat.client.sessionExtend = function (msg) {
+                    $("#codeDiv").html(msg);
+                };
+                chat.client.qcount = function (msg) {
+                    unAnsQCount();
+                    ansQcount();
+                };
+                chat.client.users = function (msg) {
+                    $("#users").html(msg);
+                };
+                $.connection.hub.start().done(function () {
+                });
+            });
+        }
+
+
+        function loadSessionTime() {
+            $.ajax({
+                url: "@Url.Action("Duration", "Time")",
+                method: "post",
+                success: function (result) {
+                    $("#timer").countdown('destroy');
+                    $('#timerHolder').show();
+                    $("#timer").countdown(
+                        {
+                            until: result,
+                            compact: true
+                        });
+                }//ajax success
+            });
+        }
+
+        function unAnsQCount() {
+            $.ajax({
+                url: "@Url.Action("UnAnsCount", "Question")",
+                method: 'post',
+                success: function (result) {
+                    $('#unansweredCount').html(result[0] + " / " + result[1]);
+                }
+            });
+        }
+
+        function ansQcount() {
+            $.ajax({
+                url: "@Url.Action("AnsCount", "Question")",
+                method: 'post',
+                success: function (result) {
+                    $('#answeredCount').html(result[0] + " / " + result[1]);
+                }
+            });
+        }
+
+        function loadPhrases() {
+            $.ajax({
+                url: "@Url.Action("Phrases","Question")",
+                method: 'post',
+                beforeSend: function () {
+                    $("#phrasesTd").addClass("loading");
+                },
+                success: function (result) {
+                    $("#phrasesTd").html(result);
+                    $('.phrase').click(function () {
+                        var text = $(this).attr('title');
+                        if ($('#answer').val() != '')
+                            text = ' ' + text;
+                        $('#answer').val($('#answer').val() + text);
+                    })
+                },
+                error: function () {
+                    $("#phrasesTd").html("Error while loading, Sorry for that . .");
+                },
+                complete: function () {
+                    $("#phrasesTd").removeClass("loading");
+                }
+            });
+        }
+
+        function addPhrase() {
+            var text = $('#answer').val();
+            if (text != '') {
+                $.ajax({
+                    url: "@Url.Action("AddPhrase","Question")",
+                    method: 'post',
+                    data: { text: text },
+                    beforeSend: function () {
+                        $("#phrasesTd").addClass("loading");
+                    },
+                    success: function (result) {
+                        loadPhrases();
+                    },
+                    error: function () {
+                        $("#phrasesTd").html("Error while loading, Sorry for that . .");
+                    },
+                    complete: function () {
+                        $("#phrasesTd").removeClass("loading");
+                    }
+                });
+            }
+        }
+    </script>
+}

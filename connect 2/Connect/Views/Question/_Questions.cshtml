@@ -1,0 +1,27 @@
+﻿@using Connect.Models.Core
+@using Connect.Util
+
+@if (ViewBag.questions != null)
+{
+    foreach (Question question in ViewBag.questions)
+    {
+
+        <div class="question q_@question.Id">
+            @Html.Partial("_Question", question)
+        </div>
+    }
+
+    if (ViewBag.recentQuestionIndex != null)
+    {
+        <script type="text/javascript">
+            $('#recentQuestionIndex').val(@ViewBag.recentQuestionIndex);
+        </script>
+    }
+    if (ViewBag.recentAnswerQuestionIndex != null)
+    {
+        <script type="text/javascript">
+            $('#recentAnswerQuestionIndex').val(@ViewBag.recentAnswerQuestionIndex);
+        </script>
+    }
+      
+}

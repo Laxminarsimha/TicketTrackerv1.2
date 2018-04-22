@@ -1,0 +1,28 @@
+﻿@using Connect.Models.Core
+
+@if (!String.IsNullOrEmpty(Model.answer) && Model.answeredBy != null && Model.dateAnswered != null)
+{
+    Question question = Model;
+
+    <div class="answerArea">
+        <div class="avatarArea">
+            @if (question.answeredBy.image != null)
+            {
+                <img src='@Url.Action("Image","Account")/?id=@question.answeredBy.Id' class="avatar size32" />
+            }
+            else
+            {
+                <i class="avatar avatar-color-@(question.answeredBy.UserName.Length%215) avatar-letter-@question.answeredBy.UserName[0]"></i>
+            }
+
+        </div>
+        <div class="questionTextArea">
+            <div class="question-time">
+                @Model.answeredBy.UserName <span class="pull-right label-primary badge">@Model.dateAnswered.ToString("hh:mm:ss tt")</span>
+            </div>
+            <div class="answer-text" questionId="@Model.Id">
+                @Model.answer
+            </div>
+        </div>
+    </div>
+}

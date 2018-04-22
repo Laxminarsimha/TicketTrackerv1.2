@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "My Profile";
+}
+
+@section head{
+    <style>
+    </style>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading" id="threadHeading">My Profile</div>
+                <div class="panel-body">
+                    <br />
+                    <form class="form-horizontal" role="form" enctype="multipart/form-data" method="post" action='@Url.Action("SaveProfile")'>
+                        <input type="hidden" name="id" value="@ViewBag.userId" />
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="email">Profile Pic:</label>
+                            <div class="col-sm-10">
+                                <img src="@Url.Action("Image")/?id=@ViewBag.userId" class="avatar size128" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="pwd"></label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" name="picFile" id="picFile" accept="image/png">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-primary">Save Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script type="text/javascript">
+        $('#picFile').bind('change', function () {
+            var size = this.files[0].size;
+            if (size > 600000) {
+                alert('File size should be maximum of 500kb');
+            }
+        });
+    </script>
+}

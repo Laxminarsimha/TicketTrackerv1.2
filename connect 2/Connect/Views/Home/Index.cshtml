@@ -1,0 +1,220 @@
+﻿@using Connect.Services
+@{
+    ViewBag.Title = "Home";
+}
+
+@section head{
+    <link href="~/Content/datetime/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <style>
+        #responseArea {
+            height: 300px;
+            border: 2px solid #eee;
+            border-bottom: 0px;
+        }
+
+        .panel-body {
+            height: calc(100vh - 270px);
+            overflow-y: auto;
+        }
+
+        .like {
+            cursor: pointer;
+        }
+    </style>
+}
+
+<div class="col-md-12">
+    <div class="row panel-bk-color-qa" style="margin-bottom:10px; margin-right: -10px; margin-left:-10px">
+        <div class="col-md-12">
+            <div class="panel-title">
+                <div class="col-md-12">
+                    <div class="recipient question-txt-col" data-step="20" data-intro="Here you can see any broadcasted messages send to all of you . .">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td style="width:2%"><img src="~/Content/images/q-n-a_icon.png" /> </td>
+                                    <td style="width:98%" id="broadcast">Have A Question To Ask Our President ?</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <span class="fontsize12"> <i class="fa fa-time"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-right: -5px; margin-left:-5px ">
+        <div class="">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading subject-block" id="threadHeading"><i class="fa fa-question-circle fa-1x "></i> My Questions</div>
+                    <div class="panel-body">
+                        @if (ViewBag.AllowPosting)
+                        {
+                            <input type="text" class="form-control messageArea" placeholder="Your question here, (minimum 3 letters) . . ." id="message" rows="2" spellcheck="true"
+                                   data-step="21" data-intro="This is where you ask your questions . . But wait, please let me complete this tour first . . " />
+                        }
+                        <div id="myTab" data-position="top" data-step="22" data-intro="Here you can see all your questions . . ">
+
+                        </div>@*my questions tab*@
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading subject-block"><i class="fa fa-check-square-o fa-1x "></i> Answered Questions</div>
+                    <div class="panel-body" data-position="top" data-step="23" data-intro="All answered question from our president will be shown here . . ">
+                        <table class="table table-hover" id="answers">
+                            <tbody></tbody>
+                        </table>
+                    </div>@*Panel body*@
+                </div>@*Panel*@
+            </div>
+        </div>
+    </div>
+</div>
+<div id="codeDiv">
+
+</div>
+@section scripts {
+    <script src="~/Content/confirm/jquery-confirm.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Content/time/jquery.plugin.min.js"></script>
+    <script src="~/Content/time/jquery.countdown.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            answers();
+            myQuestions();
+            initSignalR();
+            loadSessionTime();
+        })
+
+        var likeId;
+        $(document.body).on('click', '.like', function () {
+            likeId = $(this);
+            var qid = $(this).attr('qid');
+            $.ajax({
+                url: "@Url.Action("Like", "Question")",
+                method: "post",
+                data: { id: qid },
+                beforeSend: function () {
+                    likeId.addClass("fa fa-hourglass-half");
+                },
+                success: function (result) {
+                    likeId.html('<i class="fa fa-thumbs-o-up fa-1x"></i> Like '+result);
+                },
+                complete: function (result) {
+                    likeId.removeClass("fa fa-hourglass-half");
+                }
+            });
+        });
+
+        function loadSessionTime() {
+            $.ajax({
+                url: "@Url.Action("Duration", "Time")",
+                method: "post",
+                success: function (result) {
+                    $("#timer").countdown('destroy');
+                    $('#timerHolder').show();
+                    $("#timer").countdown(
+                        {
+                            until: result,
+                            compact: true,
+                            onExpiry: timeisUp
+                        });
+                }//ajax success
+            });
+        }
+
+        function initSignalR() {
+            $(function () {
+                var chat = $.connection.questionHub;
+                chat.client.answers = function (msg) {
+                    $("#answers tbody").prepend(msg);
+                    myQuestions();
+                    ApplyRateit();
+                };
+                chat.client.broadcast = function (msg) {
+                    $("#broadcast").html("<marquee >" + msg + "</marquee>");
+                };
+                chat.client.sessionExtend = function (msg) {
+                    $("#codeDiv").html(msg);
+                };
+                chat.client.readOnly = function (msg) {
+                    if (msg == 'ReadOnly') {
+                        $('#message').hide();
+                    }
+                };
+                $.connection.hub.start().done(function () {
+                });
+            });
+        }
+
+        $('#message').keydown(function (e) {
+            var text = $(this).val().trim();
+            if (text != '' && text.length > 2) {
+
+                if (e.which == 13) {
+                    postQuestion();
+                }
+            }
+        })
+
+        function postQuestion() {
+            var question = $('#message').val()
+            $.ajax({
+                url: "@Url.Action("Post", "Question")",
+                method: "post",
+                data: { text: question },
+                success: function (result) {
+                    if (result == "@(TimeService.READ_ONLY)") {
+                        alert("Questions Posting Time Has Been Exceeded . .");
+                        location.reload();
+                    }
+                    $("#message").val("");
+                    $("#similarThreads").html('');
+                    myQuestions();
+                }
+            });
+        }
+
+        function Similar(text) {
+            $.ajax({
+                url: "@Url.Action("Similar", "Question")",
+                method: "post",
+                data: { text: text },
+                success: function (result) {
+                    $("#similarThreads").html(result);
+                }
+            });
+        }
+
+        function myQuestions() {
+            $.ajax({
+                url: "@Url.Action("MyQuestions", "Question")",
+                method: "post",
+                success: function (result) {
+                    $("#myTab").html(result);
+                }
+            });
+        }
+
+        function answers() {
+            $.ajax({
+                url: "@Url.Action("Answers","Question")",
+                method: 'post',
+                success: function (result) {
+                    $("#answers tbody").html(result);
+                }
+            });
+        }
+
+        function timeisUp() {
+            alert("Session completed . . .");
+            window.location = "Account/LogOff";
+        }
+    </script>
+}

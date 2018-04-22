@@ -1,0 +1,158 @@
+﻿@using Connect.Models.Core
+
+@{
+    Layout = null;
+    var countdownSeconds = ViewBag.countdownSeconds;
+    Session currentSession = ViewBag.currentSession;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    @if (countdownSeconds != null)
+    {
+        <meta http-equiv="refresh" content="@countdownSeconds; url=@Url.Action("Index","Home")" />
+    }
+    <meta charset="UTF-8">
+    <title>Connect</title>
+    <meta name="description" content="Connect time remaining page">
+    <meta name="author" content="Excelra Knowledge Solutions">
+    <!-- Mobile Specific Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+    <link href="~/Content/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/App/plugins/fa/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/time/style.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+    <script src="~/Content/time/html5shiv.js"></script>
+        <![endif]-->
+    <style>
+        html {
+            height: 100vh;
+        }
+
+        #page-top {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="lading"></div>
+        </div>
+    </div><!-- /#preloader -->
+    <!-- Preloader End-->
+    <!-- Page Top Section -->
+    <section id="page-top" class="section-style" data-background-image="@Url.Content("~/Content/images/excelra-bg-2.jpg")">
+        <div class="pattern height-resize" id="viewarea">
+            <div class="container" id="time-container">
+                <h1 class="site-title">
+                    <i class="fa fa-comments-o"></i> Connect
+                </h1><!-- /.site-title -->
+
+                @if (currentSession != null)
+                {
+                    <h3 class="section-name" style="font-family:Segoe UI">
+                        <span>
+                            Current Session @currentSession.StartTime.ToString("hh:mm tt") to @currentSession.EndTime.ToString("hh:mm tt")
+                        </span>
+                    </h3><!-- /.section-name -->
+                    <div id="time_countdown" class="time-count-container">
+                        <div class="col-sm-3">
+                            <div class="time-box">
+                                <div class="time-box-inner dash hours_dash animated" data-animation="rollIn" data-animation-delay="0">
+                                    <span class="time-number">
+                                        <span class="digit">0</span>
+                                        <span class="digit">0</span>
+                                    </span>
+                                    <span class="time-name">Hours</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="time-box">
+                                <div class="time-box-inner dash minutes_dash animated" data-animation="rollIn" data-animation-delay="0">
+                                    <span class="time-number">
+                                        <span class="digit">0</span>
+                                        <span class="digit">0</span>
+                                    </span>
+                                    <span class="time-name">Minutes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="time-box">
+                                <div class="time-box-inner dash seconds_dash animated" data-animation="rollIn" data-animation-delay="0">
+                                    <span class="time-number">
+                                        <span class="digit">0</span>
+                                        <span class="digit">0</span>
+                                    </span>
+                                    <span class="time-name">Seconds</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><!-- /.time-count-container -->
+                    <p class="time-until">
+                        <span>Time To Connect</span>
+                    </p><!-- /.time-until -->
+                    <div class="next-section" style="visibility:hidden">
+                        <a class="go-to-about"><span></span></a>
+                    </div><!-- /.next-section -->
+                }
+                else
+                {
+                    <h3 class="text-center">
+                        @Html.Raw(ViewBag.msg)
+                    </h3>
+
+                    <div style="padding-top:20px;text-align:center">
+                        <a href="@Url.Action("Logoff","Account")" style="color:white">Logout</a>
+                    </div>
+                }
+
+            </div><!-- /.container -->
+
+            <footer id="footer-section">
+                <p class="copyright">
+                    &copy; 2017-@DateTime.Now.Year All Rights Reserved. Designed & Developed by <a target="_blank" href="http://www.excelra.com" style="color:dimgrey">Excelra Knowledge Solutions</a>
+                </p>
+            </footer>
+            <!-- Footer Section End -->
+
+        </div><!-- /.pattern -->
+    </section><!-- /#page-top -->
+    <!-- Page Top Section  End -->
+    <!-- Footer Section -->
+    <script src="~/Content/App/js/jquery-1.12.1.min.js"></script>
+    <script src="~/Content/time/plugins.js"></script>
+    <script src="~/Content/time/functions.js"></script>
+    <script type="text/javascript">
+        /* Time Countdown	-------------------------------------------------------------------*/
+        $('#time_countdown').countDown({
+            targetOffset: {
+                'day': 0,
+                'month': 0,
+                'year': 0,
+                'hour': 0,
+                'min': 0,
+                'sec': @countdownSeconds
+                },
+            omitWeeks: true
+        });
+        $('#viewarea').height($(document).height()-40);
+    </script>
+</body>
+</html>
