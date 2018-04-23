@@ -11,9 +11,12 @@ namespace MVC_Sample.Models
         public string UserName = "laxminarsimha.maringanti@realpage.com";
 
         //public string Password = "Member$100614Vijhyv4AE4a0QQlzwo3vWwhb";
-        public string Password = "Member$100614";
+        public string Password = "Member$1234";
 
-        public string EndPoint = "https://www.salesforce.com/services/Soap/u/3.0";
+        //public string EndPoint = "https://www.salesforce.com/services/Soap/u/3.0";
+
+        public string EndPoint = "https://login.salesforce.com/services/Soap/u/26.0";
+        
         public string Proxy { get; set; }
         public string ClientID { get; set; }
 

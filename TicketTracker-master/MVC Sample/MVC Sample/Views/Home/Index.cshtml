@@ -19,7 +19,7 @@
             <div class="card-content">
                 <p class="category">Today's Escalations</p>
                 <h3 class="title">
-                    30
+                    @ViewBag.Last24HrsCount
                 </h3>
             </div>
             <div class="card-footer">
@@ -37,7 +37,9 @@
             </div>
             <div class="card-content">
                 <p class="category">Today Resolved Defects</p>
-                <h3 class="title">10</h3>
+                <h3 class="title">                    
+                    @ViewBag.TodayClosedDefects
+                </h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -52,8 +54,10 @@
                 <i class="material-icons">info_outline</i>
             </div>
             <div class="card-content">
-                <p class="category">Total Defects</p>
-                <h3 class="title">260</h3>
+                <p class="category">Overall New Defects count</p>
+                <h3 class="title">
+                    @ViewBag.OverallNewDefects                    
+                </h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -68,8 +72,10 @@
                 <i class="fa fa-ticket"></i>
             </div>
             <div class="card-content">
-                <p class="category">Recent Raced tickets</p>
-                <h3 class="title">15</h3>
+                <p class="category">High Priority Defetcs</p>
+                <h3 class="title">
+                    @ViewBag.HighPriorityDefects                    
+                </h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -127,8 +133,21 @@
             }, {
                 name: 'P4 - Enhancement',
                 y: 10
-            }];
-
+                }];
+            $.ajax({
+                url: "@Url.Action("GetHighPriorityDefects")",
+                DataType: "Json",
+                success: function (result) {
+                    
+                }
+            });
+            $.ajax({
+                url: "@Url.Action("GetOverallNewDefects")",
+                DataType: "Json",
+                success: function (result) {                    
+                }
+            });
+             
             $.ajax({
                 url: "@Url.Action("GetLast24HrsDeftecsList")",
                 DataType: "Json",

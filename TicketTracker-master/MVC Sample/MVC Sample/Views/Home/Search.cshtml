@@ -32,7 +32,7 @@
                 var search = $(this).val();
                 if (search.length > 2) {
                     $.ajax({
-                        url: "@Url.Action("SearchDefects","Home")",
+                        url: "@Url.Action("GetSearchedData", "Home")",
                         data: { "search": search },
                         success: function (result) {
                             $("#search-display").html(result);

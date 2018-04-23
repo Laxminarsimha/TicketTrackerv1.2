@@ -3380,6 +3380,8 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Content>
     <Content Include="Views\Shared\_login_layout.cshtml" />
+    <Content Include="Views\Home\_PossibleFix.cshtml" />
+    <Content Include="Views\Home\_Download.cshtml" />
     <None Include="Web References\sforce\wsdl.wsdl" />
   </ItemGroup>
   <ItemGroup>
