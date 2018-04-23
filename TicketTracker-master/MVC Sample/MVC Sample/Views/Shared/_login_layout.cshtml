@@ -27,6 +27,7 @@
                     url: "@Url.Action("checkUser","Account")",
                     dataType:"json"
                 }).then(function successCallback(response) {
+                    console.log(response);
                     if (response.data.status == "success")
                     {
                         window.location.href = "@Url.Action("index","Home")";
@@ -47,12 +48,29 @@
             <div class="content">
                 @RenderBody()
             </div>
+    <div id="loadingDiv" style="display: none">
+        <img src="~/Content/assets/img/ajax-loader.gif" />
+    </div>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Content/assets/js/material.min.js"></script>
     <script src="~/Content/assets/js/perfect-scrollbar.jquery.min.js"></script>
     <script src="~/Content/assets/js/material-dashboard.js"></script>
     <script src="~/Content/assets/js/highcharts.js"></script>
+    <script>
+        //Loading Image for Ajax Call
+        jQuery(document).ajaxStart(function () {
+            jQuery("#succ_respone").hide();
+            jQuery("#err_respone").hide();
+            jQuery('#loadingDiv').show();
+        }).ajaxStop(function () {
+            jQuery('#loadingDiv').hide();
+        }).ajaxError(function (event, request, settings) {
+            if (request.status == 403) {
+                // window.location.href = app_url + "/index.php/";
+            }
+        });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

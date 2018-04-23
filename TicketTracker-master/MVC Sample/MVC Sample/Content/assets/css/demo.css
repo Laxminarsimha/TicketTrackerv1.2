@@ -63,3 +63,24 @@
 .tim-row h3 {
     margin-top: 0;
 }
+
+#loadingDiv {
+    opacity: 0.5;
+    position: fixed;
+    z-index: 1001;
+    background-color: #fff;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+}
+    #loadingDiv img {
+        position: fixed;
+        width: 140px;
+        height: 146px;
+        left: 50%;
+        top: 50%;
+        margin-left: -70px;
+        margin-top: -73px;
+    }

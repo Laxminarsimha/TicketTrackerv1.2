@@ -101,7 +101,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a href="@Url.Action("logout","Account")">Logout</a>
+                                        <a href="@Url.Action("logoff","Account")">Logout</a>
                                     </li>
                                 </ul>
                             </li>
@@ -127,6 +127,10 @@
         </div>
     </div>
 
+    <div id="loadingDiv" style="display: none">
+        <img src="~/Content/assets/img/ajax-loader.gif" />
+    </div>
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script src="~/Content/assets/js/material.min.js"></script>
@@ -134,6 +138,20 @@
     <script src="~/Content/assets/js/material-dashboard.js"></script>
     <script src="~/Content/assets/js/highcharts.js"></script>
     @RenderSection("scripts", required: false)
+    <script>
+        //Loading Image for Ajax Call
+        jQuery(document).ajaxStart(function () {
+            jQuery("#succ_respone").hide();
+            jQuery("#err_respone").hide();
+            jQuery('#loadingDiv').show();
+        }).ajaxStop(function () {
+            jQuery('#loadingDiv').hide();
+        }).ajaxError(function (event, request, settings) {
+            if (request.status == 403) {
+               // window.location.href = app_url + "/index.php/";
+            }
+        });
+    </script>
     <script src="https://widget.flowxo.com/embed.js" data-fxo-widget="eyJ0aGVtZSI6IiM2N2MxOGUiLCJ3ZWIiOnsiYm90SWQiOiI1YWRjNWQwYWNiMzA1MDAwODEyYmM0MDIiLCJ0aGVtZSI6IiM2N2MxOGUiLCJsYWJlbCI6IkFmZm9yZGFibGUgTGl2ZSBTdXBwb3J0In0sIndlbGNvbWVUZXh0IjoiQWZmb3JkYWJsZSBMaXZlIFN1cHBvcnQifQ==" async defer></script>
 </body>
 </html>

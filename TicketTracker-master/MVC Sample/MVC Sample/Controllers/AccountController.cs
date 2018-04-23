@@ -387,12 +387,12 @@ namespace MVC_Sample.Controllers
 
         //
         // POST: /Account/LogOff
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("login", "Account");
         }
 
         //
@@ -403,10 +403,14 @@ namespace MVC_Sample.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult checkUser(string userName, string password)
         {
             if (userName == "admin" & password == "admin@123")
             {
+                var user = new ApplicationUser { UserName = userName, Email = userName };
+                var result = UserManager.CreateAsync(user, password);
+                SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 return Json(new { status = "success", msg = "Successfully login." });
             }
             else
@@ -414,6 +418,7 @@ namespace MVC_Sample.Controllers
                 return Json(new { status = "error", msg = "Invalid details." });
             }
         }
+
 
         protected override void Dispose(bool disposing)
         {
