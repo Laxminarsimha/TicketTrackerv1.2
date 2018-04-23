@@ -14,8 +14,36 @@
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
     @RenderSection("styles", required: false)
     <script src="~/Content/angular-1.6.9/angular.min.js"></script>
+
+    <script>
+        var phonecatApp = angular.module('starter', []);
+
+        // Define the `PhoneListController` controller on the `phonecatApp` module
+        phonecatApp.controller('LoginController', function LoginController($scope, $http) {
+            $scope.login = function (credentials) {
+                $http({
+                    method: 'POST',
+                    data: { "userName": credentials.username, "password": credentials.password },
+                    url: "@Url.Action("checkUser","Account")",
+                    dataType:"json"
+                }).then(function successCallback(response) {
+                    if (response.data.status == "success")
+                    {
+                        window.location.href = "@Url.Action("index","Home")";
+                    } else {
+                        $("#msg").text(response.data.msg).show();
+                    }
+                    // this callback will be called asynchronously
+                    // when the response is available
+                }, function errorCallback(response) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+                });
+            }
+        });
+    </script>
 </head>
-<body>
+<body ng-app="starter">
             <div class="content">
                 @RenderBody()
             </div>
