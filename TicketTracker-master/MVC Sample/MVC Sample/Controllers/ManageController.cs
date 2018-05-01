@@ -10,7 +10,7 @@ using MVC_Sample.Models;
 
 namespace MVC_Sample.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

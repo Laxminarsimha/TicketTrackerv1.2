@@ -13,23 +13,23 @@ namespace Connect.Services
         public bool ValidTime()
         {
             ApplicationDbContext db = new ApplicationDbContext();
-            var session = db.Sessions.FirstOrDefault();
-            if (session != null)
-            {
-                var now = DateTime.Now;
-                if ((now > session.StartTime) && (now < session.EndTime))
-                    return true;
-                return false;
-            }
+            //var session = db.Sessions.FirstOrDefault();
+            //if (session != null)
+            //{
+            //    var now = DateTime.Now;
+            //    if ((now > session.StartTime) && (now < session.EndTime))
+            //        return true;
+            //    return false;
+            //}
             return false;
         }
         static public bool IsValidPostingTime()
         {
             using (ApplicationDbContext db = new ApplicationDbContext())
             {
-                var session = db.Sessions.FirstOrDefault();
-                if (session != null)
-                    return DateTime.Now < session.PostingLimitTime;
+                //var session = db.Sessions.FirstOrDefault();
+                //if (session != null)
+                //    return DateTime.Now < session.PostingLimitTime;
             }
             return false;
         }

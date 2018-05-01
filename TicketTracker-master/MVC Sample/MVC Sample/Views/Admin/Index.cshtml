@@ -1,0 +1,262 @@
+﻿@{
+    ViewBag.Title = "Reports";
+}
+
+@section styles{
+    <link href="~/Content/timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/confirm/jquery-confirm.min.css" rel="stylesheet" />
+    <style>
+        .digital {
+            font-family: 'digital-7';
+            font-size: 45px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .panel-body {
+            min-height: 75px;
+        }
+
+        .panel-body-full {
+            min-height: 250px;
+        }
+
+        #dateTable td {
+            padding: 2px;
+        }
+
+        .dateTime {
+            width: 80px;
+        }
+    </style>
+
+}
+
+    <div class="dropdown-menu">
+        <a class="dropdown-item" href="#">Link 1</a>
+        <a class="dropdown-item" href="#">Link 2</a>
+        <a class="dropdown-item" href="#">Link 3</a>
+    </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <h2>
+                Dashboard
+                <span style="padding-left:10px;"><a href="@Url.Action("Index","Report")" target="_blank" style="font-size:14px"><i class="fa fa-file-pdf-o"></i> Session Report</a></span>
+            </h2>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Online Users</div>
+                <div class="panel-body digital" id="users">
+
+                </div>
+            </div>
+        </div>@*Report-1*@
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Total Questions</div>
+                <div class="panel-body">
+                    <div class="digital" style="color:green" id="totalQuestions"></div>
+                </div>
+            </div>
+        </div>@*Report-2*@
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">Answered Questions</div>
+                <div class="panel-body">
+                    <div class="digital" style="color:blue" id="answeredQuestions"></div>
+                </div>
+            </div>
+        </div>@*Report-3*@
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    High Rated Questions
+                </div>
+                <div class="panel-body panel-body-full">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Rating</th>
+                                <th>Questions</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var entry in ViewBag.topRatedQuestions)
+                                {
+                                    <tr>
+                                        <td>@entry.user</td>
+                                        <td>@entry.count</td>
+                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>@*Report-1*@
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">Most Questions Asked By</div>
+                <div class="panel-body panel-body-full">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Posted</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var entry in ViewBag.groupByUsersList)
+                                {
+                                    <tr>
+                                        <td>@entry.user</td>
+                                        <td>@entry.count</td>
+                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>@*Report-2*@
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Most Questions Answered To
+                </div>
+                <div class="panel-body panel-body-full">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Answers</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var entry in ViewBag.topUsersGotAnswers)
+                                {
+                                    <tr>
+                                        <td>@entry.user</td>
+                                        <td>@entry.count</td>
+                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>@*Report-3*@
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Good Questions By
+                </div>
+                <div class="panel-body panel-body-full">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Questions</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var entry in ViewBag.topGoodQuestions)
+                                {
+                                    <tr>
+                                        <td>@entry.user</td>
+                                        <td>@entry.count</td>
+                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
+                                    </tr>
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>@*Report-4*@
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Session Settings
+            </div>
+            <div class="panel-body" style="height:100px;max-height:100px">
+                <h5>Set today's session Time : </h5>
+                <table id="dateTable">
+                    <tbody>
+                        <tr>
+                            @*<td><b>From</b> <input type="text" id="from" class="dateTime" value="@session.StartTime.ToString("hh:mm tt")" /></td>
+                                <td><b>To</b> <input type="text" id="to" class="dateTime" value="@session.EndTime.ToString("hh:mm tt")" /></td>*@
+                            <td><input type="button" id="updateSession" value="Update" /></td>
+                            <td id="updateStatus"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="~/Content/timepicker/js/bootstrap-timepicker.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('.dateTime').timepicker({ showMeridian: false });
+            getCount();
+            initSignalR();
+        })
+
+        
+
+        function getCount() {
+            $.ajax({
+                url: "@Url.Action("GetCount", "Home")",
+                method: 'post',
+                success: function (result) {
+                    showQCount(result[0], result[1]);
+                }
+            });
+        }
+
+        function showQCount(ans, total) {
+            $("#answeredQuestions").html(ans);
+            $("#totalQuestions").html(total);
+        }
+
+        function initSignalR() {
+            $(function () {
+                var chat = $.connection.DashboardHub;
+                chat.client.MyPMETicketsCount = function (msg) {
+                    $("#MyPMETicketsCount").html(msg);
+                };
+                chat.client.qcount = function (msg) {
+                    showQCount(msg.Data[0], msg.Data[1]);
+                };
+                $.connection.hub.start().done(function () {
+                });
+            });
+        }
+    </script>
+}

@@ -12,7 +12,7 @@ using MVC_Sample.Models;
 
 namespace MVC_Sample.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;
@@ -411,7 +411,8 @@ namespace MVC_Sample.Controllers
                 var user = new ApplicationUser { UserName = userName, Email = userName };
                 var result = UserManager.CreateAsync(user, password);
                 SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                return Json(new { status = "success", msg = "Successfully login." });
+                return RedirectToAction("Index", "Home");
+                //return Json(new { status = "success", msg = "Successfully login." });
             }
             else
             {

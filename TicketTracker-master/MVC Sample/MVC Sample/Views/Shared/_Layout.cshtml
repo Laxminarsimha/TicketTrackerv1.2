@@ -13,10 +13,11 @@
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>\
     <style>
         .powered-by {
-            display:none !important;
+            display: none !important;
         }
     </style>
     @RenderSection("styles", required: false)
+    @RenderSection("head", required: false)
 </head>
 <body>
     <div class="wrapper">
@@ -47,7 +48,7 @@
                         </a>
                     </li>
                 </ul>
- 
+
             </div>
         </div>
         <div class="main-panel">
@@ -123,13 +124,14 @@
             <div class="content">
                 @RenderBody()
             </div>
-            
+
         </div>
     </div>
 
     <div id="loadingDiv" style="display: none">
         <img src="~/Content/assets/img/ajax-loader.gif" />
     </div>
+
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
@@ -148,10 +150,10 @@
             jQuery('#loadingDiv').hide();
         }).ajaxError(function (event, request, settings) {
             if (request.status == 403) {
-               // window.location.href = app_url + "/index.php/";
+                // window.location.href = app_url + "/index.php/";
             }
         });
-    </script>
+    </script>    
     <script src="https://widget.flowxo.com/embed.js" data-fxo-widget="eyJ0aGVtZSI6IiM2N2MxOGUiLCJ3ZWIiOnsiYm90SWQiOiI1YWRjNWQwYWNiMzA1MDAwODEyYmM0MDIiLCJ0aGVtZSI6IiM2N2MxOGUiLCJsYWJlbCI6IkFmZm9yZGFibGUgTGl2ZSBTdXBwb3J0In0sIndlbGNvbWVUZXh0IjoiQWZmb3JkYWJsZSBMaXZlIFN1cHBvcnQifQ==" async defer></script>
 </body>
 </html>

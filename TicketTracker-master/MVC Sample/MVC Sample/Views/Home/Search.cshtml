@@ -3,6 +3,13 @@
     ViewBag.Title = "Search";
 }
 
+@*<div id="divLoading1" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: rgb(102, 102, 102); z-index: 30001; opacity: 0.8;">
+    <p style="position: absolute; color: White; top: 50%; left: 45%;">
+        Loading, please wait...
+        <img src="~/Content/assets/img/ajax-loader.gif" />
+    </p>
+</div>*@
+
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="card card-stats">
@@ -26,20 +33,35 @@
     </div>
 </div>
 @section scripts{
-    <script>
-        $(document).ready(function () {
+<script>
+        jQuery(document).ajaxStart(function () {
+            jQuery("#succ_respone").hide();
+            jQuery("#err_respone").hide();
+            jQuery('#divLoading').show();
+        }).ajaxStop(function () {
+            jQuery('#divLoading').hide();
+        }).ajaxError(function (event, request, settings) {
+            if (request.status == 403) {
+                // window.location.href = app_url + "/index.php/";
+            }
+            });
+
+
             $("#search").keypress(function () {
                 var search = $(this).val();
                 if (search.length > 2) {
                     $.ajax({
-                        url: "@Url.Action("GetSearchedData", "Home")",
+                        url: "@Url.Action("GetSeachScreenData", "Home")",
                         data: { "search": search },
                         success: function (result) {
+                            @*alert(@Html.Raw((String)ViewBag.FilteredData));
+                            $("#search-display").html( @Html.Raw((String)ViewBag.FilteredData));*@
+                            @*alert(@Html.Raw((String)ViewBag.FilteredData));*@
                             $("#search-display").html(result);
                         }
                     });
                 }
             });
-        });
-    </script>
+
+</script>
 }

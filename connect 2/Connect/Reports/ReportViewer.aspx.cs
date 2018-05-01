@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Microsoft.Reporting.WebForms;
+//using Microsoft.Reporting.WebForms;
 using System.IO;
 using Connect.Models;
 using Util;
@@ -52,24 +52,24 @@ namespace Connect.Reports
             }
 
             var reportPath = Server.MapPath(@"Templates\Session.rdlc");
-            reportViewer.LocalReport.ReportPath = reportPath;
+            //reportViewer.LocalReport.ReportPath = reportPath;
 
 
-            ReportDataSource questionsDs = new ReportDataSource();
-            questionsDs.Name = "QuestionsDataSet";
-            questionsDs.Value = questions.ToDataTable();
-            reportViewer.LocalReport.DataSources.Add(questionsDs);
+            //ReportDataSource questionsDs = new ReportDataSource();
+            //questionsDs.Name = "QuestionsDataSet";
+            //questionsDs.Value = questions.ToDataTable();
+            //reportViewer.LocalReport.DataSources.Add(questionsDs);
 
-            ReportParameter[] reportParams = new ReportParameter[] {
-                new ReportParameter("Date",session.StartTime.ToString("dd-MM-yyyy")),
-                new ReportParameter("From",session.StartTime.ToString("hh:mm tt")),
-                new ReportParameter("To",session.EndTime.ToString("hh:mm tt")),
-                new ReportParameter("Logo",ConfigurationManager.AppSettings["REPORT_LOGO"]),
-                new ReportParameter("TopDots",@"http://192.168.45.32/images/report_top.jpg")
-            };
-            reportViewer.LocalReport.EnableExternalImages = true;
-            reportViewer.LocalReport.EnableHyperlinks = true;
-            reportViewer.LocalReport.SetParameters(reportParams);
+            //ReportParameter[] reportParams = new ReportParameter[] {
+            //    new ReportParameter("Date",session.StartTime.ToString("dd-MM-yyyy")),
+            //    new ReportParameter("From",session.StartTime.ToString("hh:mm tt")),
+            //    new ReportParameter("To",session.EndTime.ToString("hh:mm tt")),
+            //    new ReportParameter("Logo",ConfigurationManager.AppSettings["REPORT_LOGO"]),
+            //    new ReportParameter("TopDots",@"http://192.168.45.32/images/report_top.jpg")
+            //};
+            //reportViewer.LocalReport.EnableExternalImages = true;
+            //reportViewer.LocalReport.EnableHyperlinks = true;
+            //reportViewer.LocalReport.SetParameters(reportParams);
         }
     }
 }

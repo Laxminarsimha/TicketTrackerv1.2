@@ -11,12 +11,16 @@ using System.Text.RegularExpressions;
 
 namespace MVC_Sample.Controllers
 {
-    //[Authorize]
+    //[Authorize]    
     public class HomeController : Controller
     {
+        //[AllowAnonymous]
         public ActionResult Index()
         {
-
+            ViewBag.Last24HrsCount = this.Last24HrsDeftecsList();
+            ViewBag.TodayClosedDefects = this.TodayClosedDefects();
+            ViewBag.OverallNewDefects = this.OverallNewDefects();
+            ViewBag.HighPriorityDefects = this.HighPriorityDefects();
             return View();
         }
 
@@ -131,7 +135,7 @@ namespace MVC_Sample.Controllers
             "  Priority__c,  " +
             "  Escalation_Status__c, Summary__c, Support_Product__c " +
             "from Problem_Management_Escalation__c  where Support_Product__c in ('OneSite Affordable', 'OneSite Tax Credits', 'OneSite Leasing and Rents Rural Housing') " +
-            "and DAY_ONLY(Date_Escalated__c)=LAST_N_DAYS:1 order by Name desc";
+            "and DAY_ONLY(Date_Escalated__c)=LAST_N_DAYS:3 order by Name desc";
                 //this.btnMore.Visible = false;
                 //PartnerSample.binding.QueryOptionsValue = new sforce.QueryOptions();
                 //PartnerSample.binding.QueryOptionsValue.batchSize = Convert.ToInt16(Application.UserAppDataRegistry.GetValue("batchSize", "500"));
@@ -386,15 +390,17 @@ namespace MVC_Sample.Controllers
                 content = "Uh oh!";
             }
 
-            ViewBag.ContentData = content;
-            return PartialView("~/Views/Home/_Download.cshtml");
+            ViewBag.FilteredData = content;
+            //return this.Json(content, JsonRequestBehavior.AllowGet);            
+            //return PartialView("~/Views/Home/_Download.cshtml");
+            return File(filePath, "application/txt", Server.UrlEncode(filePath));
         }
 
         public ActionResult GetSearchedData(string search)
         {
             DataTable dtOutcome = new DataTable();
             DataTable dt = GetSearchedDataSOQL(search);
-            if (dt.Rows.Count >= 1)
+            if (dt != null && dt.Rows.Count >= 1)
             {
                 dtOutcome = dt.AsEnumerable().OrderBy(x => x["Name"]).Take(10).AsEnumerable().CopyToDataTable();
                 dtOutcome.DefaultView.ToTable( /*distinct*/ true);
@@ -409,6 +415,38 @@ namespace MVC_Sample.Controllers
             ViewBag.FilteredData = searchedQuery;
             return PartialView("~/Views/Home/_PossibleFix.cshtml");
 
+        }
+
+        public ActionResult GetSeachScreenData(string search)
+        {
+            DataTable dtOutcome = new DataTable();
+            DataTable dt = GetSearchedDataSOQL(search);
+            if (dt != null && dt.Rows.Count >= 1)
+            {
+                dtOutcome = dt.AsEnumerable().OrderBy(x => x["Name"]).Take(10).AsEnumerable().CopyToDataTable();
+                dtOutcome.DefaultView.ToTable( /*distinct*/ true);
+            }
+            List<TicketFixesData> searchedQuery = new List<TicketFixesData>();
+            if (dtOutcome != null)
+            {
+                searchedQuery = LoadPossibleFixData(dtOutcome);
+            }
+
+            //List<TicketData> ticketdata = LoadData(Server.MapPath("~/Source/TodaysDefects.csv"));
+            ViewBag.FilteredData = searchedQuery;
+            return PartialView("~/Views/Home/_PossibleFix.cshtml");
+
+        }
+
+        public ActionResult DownloadFile(string EscalationId)
+        {
+            string path = @"\\RPIPL2-HE-DV059\Laxminarsimha\AffordableDataFixes";
+            string filePath = EnumerateFilesByFilter(path, EscalationId);
+
+            //string path = AppDomain.CurrentDomain.BaseDirectory + "FolderName/";
+            //byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+            //string fileName = "filename.extension";
+            return File(filePath, System.Net.Mime.MediaTypeNames.Application.Octet, EscalationId + ".txt");
         }
 
         private static HashSet<String> s_StopWords =
@@ -634,6 +672,99 @@ namespace MVC_Sample.Controllers
             return Json(new { redirecturl = "" }, JsonRequestBehavior.AllowGet);
 
         }
-      
+
+        public int Last24HrsDeftecsList()
+        {
+            ForceLoginController forceLogin = new ForceLoginController();
+            if (forceLogin.SaleForceLoginAuthentication())
+            {
+                DataTable dt = Get24HrsDataSOQL();
+                if (dt != null)
+                {
+                    Last24HrsData = LoadData(dt);
+                    return dt.Rows.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public int TodayClosedDefects()
+        {
+            ForceLoginController forceLogin = new ForceLoginController();
+            if (forceLogin.SaleForceLoginAuthentication())
+            {
+                DataTable dt = Get24HrsDataSOQL();
+                if (dt != null)
+                {
+                    Last24HrsData = LoadData(dt);
+                    return dt.Rows.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        public int OverallNewDefects()
+        {
+            ForceLoginController forceLogin = new ForceLoginController();
+            if (forceLogin.SaleForceLoginAuthentication())
+            {
+                DataTable dt = Get24HrsDataSOQL();
+                if (dt != null)
+                {
+                    Last24HrsData = LoadData(dt);
+                    return dt.Rows.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+
+        public int HighPriorityDefects()
+        {
+            ForceLoginController forceLogin = new ForceLoginController();
+            if (forceLogin.SaleForceLoginAuthentication())
+            {
+                DataTable dt = Get24HrsDataSOQL();
+                if (dt != null)
+                {
+                    Last24HrsData = LoadData(dt);
+                    return dt.Rows.Count;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
     }
+
 }

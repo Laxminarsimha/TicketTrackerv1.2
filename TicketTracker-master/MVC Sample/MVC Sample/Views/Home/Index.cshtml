@@ -4,11 +4,16 @@
 @section styles{
     <link href="~/Content/datatables/jquery.dataTables.min.css" rel="stylesheet" />
     <style>
-        .modal-custom-lg{
-            width:80% !important;
+        .modal-custom-lg {
+            width: 80% !important;
         }
     </style>
 }
+
+<div id="loadingDiv" style="display: none">
+    <img src="~/Content/assets/img/ajax-loader.gif" />
+</div>
+
 
 <div class="row">
     <div class="col-lg-3 col-md-6 col-sm-6">
@@ -37,7 +42,7 @@
             </div>
             <div class="card-content">
                 <p class="category">Today Resolved Defects</p>
-                <h3 class="title">                    
+                <h3 class="title">
                     @ViewBag.TodayClosedDefects
                 </h3>
             </div>
@@ -56,7 +61,7 @@
             <div class="card-content">
                 <p class="category">Overall New Defects count</p>
                 <h3 class="title">
-                    @ViewBag.OverallNewDefects                    
+                    @ViewBag.OverallNewDefects
                 </h3>
             </div>
             <div class="card-footer">
@@ -74,7 +79,7 @@
             <div class="card-content">
                 <p class="category">High Priority Defetcs</p>
                 <h3 class="title">
-                    @ViewBag.HighPriorityDefects                    
+                    @ViewBag.HighPriorityDefects
                 </h3>
             </div>
             <div class="card-footer">
@@ -121,6 +126,18 @@
 @section scripts{
     <script src="~/Content/datatables/jquery.dataTables.min.js"></script>
     <script>
+        jQuery(document).ajaxStart(function () {
+            jQuery("#succ_respone").hide();
+            jQuery("#err_respone").hide();
+            jQuery('#loadingDiv').show();
+        }).ajaxStop(function () {
+            jQuery('#loadingDiv').hide();
+        }).ajaxError(function (event, request, settings) {
+            if (request.status == 403) {
+                // window.location.href = app_url + "/index.php/";
+            }
+            });
+
         $(document).ready(function () {
             vob_data = [{
                 name: 'P2 - High',
@@ -138,16 +155,16 @@
                 url: "@Url.Action("GetHighPriorityDefects")",
                 DataType: "Json",
                 success: function (result) {
-                    
+
                 }
             });
             $.ajax({
                 url: "@Url.Action("GetOverallNewDefects")",
                 DataType: "Json",
-                success: function (result) {                    
+                success: function (result) {
                 }
             });
-             
+
             $.ajax({
                 url: "@Url.Action("GetLast24HrsDeftecsList")",
                 DataType: "Json",
@@ -310,7 +327,7 @@
         }
 
 
-      
+
 
     </script>
 
