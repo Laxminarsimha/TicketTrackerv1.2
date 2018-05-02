@@ -1,10 +1,10 @@
 ﻿@{
-    ViewBag.Title = "Reports";
+    ViewBag.Title = "Centers";
+    Layout = "~/Views/Shared/_admin_layout.cshtml";
 }
 
 @section styles{
-    <link href="~/Content/timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" />
-    <link href="~/Content/confirm/jquery-confirm.min.css" rel="stylesheet" />
+   
     <style>
         .digital {
             font-family: 'digital-7';
@@ -41,8 +41,7 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <h2>
-                Dashboard
-                <span style="padding-left:10px;"><a href="@Url.Action("Index","Report")" target="_blank" style="font-size:14px"><i class="fa fa-file-pdf-o"></i> Session Report</a></span>
+                Centers
             </h2>
         </div>
     </div>
@@ -51,191 +50,56 @@
 <div class="row">
     <div class="col-md-12">
         <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Online Users</div>
-                <div class="panel-body digital" id="users">
-
-                </div>
-            </div>
-        </div>@*Report-1*@
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Total Questions</div>
-                <div class="panel-body">
-                    <div class="digital" style="color:green" id="totalQuestions"></div>
-                </div>
-            </div>
-        </div>@*Report-2*@
-        <div class="col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Answered Questions</div>
-                <div class="panel-body">
-                    <div class="digital" style="color:blue" id="answeredQuestions"></div>
-                </div>
-            </div>
-        </div>@*Report-3*@
+            <select class="form-control" id="center-dropdown">
+                <option value="">
+                    Select center
+                </option>
+                <option value="Affordable">Affordable</option>
+                <option value="Budget">Budget</option>
+                <option value="Accounting">Accounting</option>
+            </select>
+        </div>
     </div>
-</div>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card card-stats">
+            <div class="card-header" data-background-color="red">
+                <i class="material-icons">info_outline</i>
+            </div>
+            <div class="card-content">
+                <p class="category">Overall Data</p>
+                <div id="center-data">
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    High Rated Questions
-                </div>
-                <div class="panel-body panel-body-full">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Rating</th>
-                                <th>Questions</th>
-                                <th>Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*@foreach (var entry in ViewBag.topRatedQuestions)
-                                {
-                                    <tr>
-                                        <td>@entry.user</td>
-                                        <td>@entry.count</td>
-                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
-                                    </tr>
-                                }*@
-                        </tbody>
-                    </table>
                 </div>
             </div>
-        </div>@*Report-1*@
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Most Questions Asked By</div>
-                <div class="panel-body panel-body-full">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Posted</th>
-                                <th>Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*@foreach (var entry in ViewBag.groupByUsersList)
-                                {
-                                    <tr>
-                                        <td>@entry.user</td>
-                                        <td>@entry.count</td>
-                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
-                                    </tr>
-                                }*@
-                        </tbody>
-                    </table>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">local_offer</i> Tracked from Salesforce
                 </div>
-            </div>
-        </div>@*Report-2*@
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Most Questions Answered To
-                </div>
-                <div class="panel-body panel-body-full">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Answers</th>
-                                <th>Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*@foreach (var entry in ViewBag.topUsersGotAnswers)
-                                {
-                                    <tr>
-                                        <td>@entry.user</td>
-                                        <td>@entry.count</td>
-                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
-                                    </tr>
-                                }*@
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>@*Report-3*@
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Good Questions By
-                </div>
-                <div class="panel-body panel-body-full">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>Questions</th>
-                                <th>Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @*@foreach (var entry in ViewBag.topGoodQuestions)
-                                {
-                                    <tr>
-                                        <td>@entry.user</td>
-                                        <td>@entry.count</td>
-                                        <td>@((((float)entry.count / (float)ViewBag.totalQuestions) * 100).ToString("N0"))</td>
-                                    </tr>
-                                }*@
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>@*Report-4*@
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Session Settings
-            </div>
-            <div class="panel-body" style="height:100px;max-height:100px">
-                <h5>Set today's session Time : </h5>
-                <table id="dateTable">
-                    <tbody>
-                        <tr>
-                            @*<td><b>From</b> <input type="text" id="from" class="dateTime" value="@session.StartTime.ToString("hh:mm tt")" /></td>
-                                <td><b>To</b> <input type="text" id="to" class="dateTime" value="@session.EndTime.ToString("hh:mm tt")" /></td>*@
-                            <td><input type="button" id="updateSession" value="Update" /></td>
-                            <td id="updateStatus"></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
-
 </div>
 
 @section Scripts {
 
-    <script src="~/Content/timepicker/js/bootstrap-timepicker.min.js"></script>
-    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
-    <script src="~/signalr/hubs"></script>
+   
     <script type="text/javascript">
         $(document).ready(function () {
-            //$('.dateTime').timepicker({ showMeridian: false });
-            getCount();
-            initSignalR();
+            $("#center-dropdown").change(function () {
+                var v = $("#center-dropdown option:selected").val();
+                getCenterData(v);
+            });
         })
 
         
 
-        function getCount() {
+        function getCenterData(v) {
             $.ajax({
-                url: "@Url.Action("GetCount", "Home")",
+                url: "@Url.Action("GetCenterData", "Admin")",
                 method: 'post',
+                data: {"type":v},
                 success: function (result) {
-                    showQCount(result[0], result[1]);
+                    $("#center-data").html(result);
                 }
             });
         }

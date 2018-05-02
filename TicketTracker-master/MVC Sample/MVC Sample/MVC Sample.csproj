@@ -3395,6 +3395,8 @@
     <Content Include="Views\Home\_PossibleFix.cshtml" />
     <Content Include="Views\Home\_Download.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Shared\_admin_layout.cshtml" />
+    <Content Include="Views\Admin\GetCenterData.cshtml" />
     <None Include="Web References\sforce\wsdl.wsdl" />
   </ItemGroup>
   <ItemGroup>

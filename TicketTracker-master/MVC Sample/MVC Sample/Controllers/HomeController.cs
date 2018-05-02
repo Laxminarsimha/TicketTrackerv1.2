@@ -704,8 +704,8 @@ namespace MVC_Sample.Controllers
                 DataTable dt = Get24HrsDataSOQL();
                 if (dt != null)
                 {
-                    Last24HrsData = LoadData(dt);
-                    return dt.Rows.Count;
+                    int numberOfClosedRecords = dt.Select("Escalation_Status__c = 'Closed'").Length;
+                    return numberOfClosedRecords;
                 }
                 else
                 {
@@ -727,8 +727,8 @@ namespace MVC_Sample.Controllers
                 DataTable dt = Get24HrsDataSOQL();
                 if (dt != null)
                 {
-                    Last24HrsData = LoadData(dt);
-                    return dt.Rows.Count;
+                    int numberOfRecords = dt.AsEnumerable().Where(x => x["Escalation_Status__c"].ToString() == "New").ToList().Count;
+                    return numberOfRecords;
                 }
                 else
                 {
@@ -751,8 +751,8 @@ namespace MVC_Sample.Controllers
                 DataTable dt = Get24HrsDataSOQL();
                 if (dt != null)
                 {
-                    Last24HrsData = LoadData(dt);
-                    return dt.Rows.Count;
+                    int numberOfRecords = dt.AsEnumerable().Where(x => x["Priority__c"].ToString() == "High").ToList().Count;
+                    return numberOfRecords;
                 }
                 else
                 {
