@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using MVC_Sample.Models;
+using System.Web.Security;
 
 namespace MVC_Sample.Controllers
 {
@@ -73,22 +74,49 @@ namespace MVC_Sample.Controllers
                 return View(model);
             }
 
+            ApplicationUser user = new ApplicationUser { UserName = model.Email, Email = model.Password,PasswordHash="Asdddddd21#" };
+            var identityResult = UserManager.Create(user,"Admin@123" );//model.Password
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+            FormsAuthentication.SetAuthCookie(model.Email, true);
+            var signInResult = SignInManager.PasswordSignIn(model.Email, "Admin@123", true, shouldLockout: false);
+
+            /*  switch (result)
+              {
+                  case SignInStatus.Success:
+                      return RedirectToLocal(returnUrl);
+                  case SignInStatus.LockedOut:
+                      return View("Lockout");
+                  case SignInStatus.RequiresVerification:
+                      return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                  case SignInStatus.Failure:
+                  default:
+                      ModelState.AddModelError("", "Invalid login attempt.");
+                      return View(model);
+              }*/
+            if (model.Email == "admin")
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
-                    return View(model);
+                return RedirectToAction("Index","Admin");
             }
+            else
+            {
+                if (CheckSalesForceUserExists(model.Email) == true)
+                {
+                    return RedirectToAction("Index","Home");
+                }
+                else
+                {
+                    return RedirectToAction(returnUrl);
+                }
+            }
+
+
+
+          
+            
+
+
         }
 
         //
@@ -499,5 +527,11 @@ namespace MVC_Sample.Controllers
             }
         }
         #endregion
+
+        public bool CheckSalesForceUserExists(string email)
+        {
+            return true;
+
+        }
     }
 }

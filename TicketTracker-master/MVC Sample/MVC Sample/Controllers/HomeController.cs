@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace MVC_Sample.Controllers
 {
-    //[Authorize]    
+    [Authorize]    
     public class HomeController : Controller
     {
         //[AllowAnonymous]
